@@ -1,0 +1,61 @@
+version: '3.7'
+services:
+    nginx:
+      build:
+        context: .
+        dockerfile: nginx/Dockerfile
+      ports:
+        - "8080:8080"
+      networks:
+        - app-network
+      volumes:
+        - ./logs/nginx/:/var/log/nginx/
+
+    react:
+      build:
+        context: ./app-frontend
+        dockerfile: Dockerfile
+      ports:
+        - "80:80"
+      networks:
+        - app-network
+      volumes:
+        - ./app-frontend/:/app
+      stdin_open: true
+
+    php:
+      build:
+        context: ./app-backend/
+      restart: unless-stopped
+      environment:
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_USER: ${DB_USERNAME}
+      working_dir: /var/www
+      volumes:
+        - ./app-backend:/var/www
+      ports:
+        - "8000:8000"
+      networks:
+        - app-network
+
+    mysql:
+      image: mysql:5.7
+      restart: unless-stopped
+      environment:
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_USER: ${DB_USERNAME}
+      volumes:
+        - ./initdb:/docker-entrypoint-initdb.d
+      ports:
+        - 3306:3306
+      networks:
+        - app-network
+
+networks:
+  app-network:
+    driver: bridge
+  db:
