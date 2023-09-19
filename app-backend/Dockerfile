@@ -51,8 +51,6 @@ COPY . /var/www
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install
-
 RUN addgroup -g 1000 -S www && \
     adduser -u 1000 -S www -G www-data
 
