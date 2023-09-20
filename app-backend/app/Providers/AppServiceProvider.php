@@ -19,9 +19,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(SyncNewsInterface::class, function () {
             return [
-                new GuardianApiService(),
                 new NewsApiService(),
                 new NyTimesApiService(),
+                new GuardianApiService(),
             ];
         });
 

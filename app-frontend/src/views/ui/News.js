@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardText,
@@ -11,9 +11,30 @@ import {
 const News = () => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [newsData, setNewsData] = useState([]);
+
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
+
+  useEffect(() => {
+    // Define a function to fetch news data from your API
+    const fetchNewsData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/news/list');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        console.log(data.data);
+        setNewsData(data.data); // Update the component state with the fetched data
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNewsData(); // Call the fetchNewsData function when the component mounts
+  }, []); // The empty dependency array ensures this effect runs only once on component mount
 
   return (
     <div>
@@ -66,42 +87,14 @@ const News = () => {
       </Row>
       <Row>
         <h5 className="mb-3 mt-3">News Feed</h5>
-        <Col md="6" lg="4">
-          <Card body>
-            <CardTitle tag="h5">Special Title Treatment</CardTitle>
-            <CardText>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </CardText>
-            <div>
-              <Button color="light-warning">Go somewhere</Button>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Special Title Treatment</CardTitle>
-            <CardText>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </CardText>
-            <div>
-              <Button color="light-danger">Go somewhere</Button>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-end">
-            <CardTitle tag="h5">Special Title Treatment</CardTitle>
-            <CardText>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </CardText>
-            <div>
-              <Button color="light-success">Go somewhere</Button>
-            </div>
-          </Card>
-        </Col>
+        {newsData.map((item, index) => (
+            <Col key={index} md="6" lg="4">
+              <Card body>
+                <CardTitle tag="h5">{item.title}</CardTitle>
+                <CardText>{item.content}</CardText>
+              </Card>
+            </Col>
+        ))}
       </Row>
     </div>
   );
