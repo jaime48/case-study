@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\FetchNews;
+use App\Http\Interfaces\SyncNewsInterface;
+use App\Http\Services\News\Sources\GuardianApiService;
+use App\Http\Services\News\Sources\NewsApiService;
+use App\Http\Services\News\Sources\NyTimesApiService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +17,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(SyncNewsInterface::class, function () {
+            return [
+                new GuardianApiService(),
+                new NewsApiService(),
+                new NyTimesApiService(),
+            ];
+        });
+
+        $this->app->bind(FetchNews::class, function() {
+            return new FetchNews(App::make(SyncNewsInterface::class));
+        });
     }
 
     /**
