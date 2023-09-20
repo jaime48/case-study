@@ -6,7 +6,7 @@ use App\Enum\Sources;
 use App\Http\Requests\NewsListRequest;
 use App\Http\Resources\NewsResource;
 use App\Models\News;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +18,6 @@ class NewsController
      */
     public function list(NewsListRequest $request): AnonymousResourceCollection
     {
-        if (Auth::guard('sanctum')->check()) {
-            $user = Auth::guard('sanctum')->user();
-        }
         $query = News::query();
         if ($request->category) {
             $query = $query->category($request->category);
@@ -35,17 +32,30 @@ class NewsController
             $query = $query->date($request->date);
         }
 
+        $news = $query->limit(20)->get();
+
+        if (Auth::guard('sanctum')->check()) {
+            $user = Auth::guard('sanctum')->user();
+            //todo filter by preferences
+        }
         //todo add proper paginate
-        return NewsResource::collection($query->limit(20)->get());
+        return NewsResource::collection($news);
     }
 
-    public function getCategories()
+    public function getCategories(): JsonResponse
     {
-        return News::distinct('category')->whereNotNull('category')->pluck('category');
+        $categories = News::distinct('category')->whereNotNull('category')->pluck('category');
+        return response()->json(['categories' => $categories]);
     }
 
-    public function getSources(Request $request)
+    public function getAuthors(): JsonResponse
     {
-        return Sources::cases();
+        $authors = News::distinct('author')->whereNotNull('author')->pluck('author');
+        return response()->json(['authors' => $authors]);
+    }
+
+    public function getSources(): JsonResponse
+    {
+        return response()->json(['sources' => Sources::cases()]);
     }
 }
