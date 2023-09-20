@@ -16,4 +16,25 @@ class News extends Model
     protected $casts = [
         'date' => 'date'
     ];
+
+    public function scopeCategory($query, $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    public function scopeKeyword($query, $keyword)
+    {
+        return $query->where('title', 'like', '%'.$keyword.'%')
+            ->orWhere('content', 'like', '%'.$keyword.'%');
+    }
+
+    public function scopeSource($query, $source)
+    {
+        return $query->where('source', $source);
+    }
+
+    public function scopeDate($query, $date)
+    {
+        return $query->where('date', $date);
+    }
 }

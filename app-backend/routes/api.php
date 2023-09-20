@@ -24,8 +24,8 @@ Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
 
 Route::prefix('news')->group(function() {
-    Route::get('/categories', 'NewsController@getCategories');
-    Route::get('/sources', 'NewsController@getSources');
     Route::any('/list', [NewsController::class, 'list']);
+    Route::get('/categories',  [NewsController::class, 'getCategories']);
+    Route::get('/sources',  [NewsController::class, 'getSources']);
 });
 
