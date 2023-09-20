@@ -36,6 +36,56 @@ const News = () => {
     fetchNewsData(); // Call the fetchNewsData function when the component mounts
   }, []); // The empty dependency array ensures this effect runs only once on component mount
 
+  const [keyword, setKeyword] = useState('');
+  const [category, setCategory] = useState('');
+  const [source, setSource] = useState('');
+  const [date, setDate] = useState('');
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    switch (name) {
+      case 'Keyword':
+        setKeyword(value);
+        break;
+      case 'category':
+        setCategory(value);
+        break;
+      case 'source':
+        setSource(value);
+        break;
+      case 'date':
+        setDate(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleFilterSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      console.log('filter data', { keyword, category, source, date });
+      // Send a request to the backend with filtering data
+      const response = await fetch('http://localhost:8080/api/news/list', {
+        method: 'POST', // Use the appropriate HTTP method (POST or GET) for your API
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ keyword, category, source, date }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+
+      setNewsData(data.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <Row>
@@ -48,37 +98,48 @@ const News = () => {
             </CardTitle>
             <CardBody>
               {isFilterOpen && (
-              <Form>
+              <Form onSubmit={handleFilterSubmit}>
                 <FormGroup>
                   <Label for="Keyword">Keyword</Label>
                   <Input
                       id="Keyword"
                       name="Keyword"
-                      placeholder="Filter by keyword"
                       type="string"
+                      value={keyword}
+                      onChange={handleInputChange}
                   />
                 </FormGroup>
                 <FormGroup>
                   <Label for="category">Category</Label>
-                  <Input id="category" name="category" type="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                  <Input id="category"
+                         name="category"
+                         type="string"
+                         value={category}
+                         onChange={handleInputChange}
+                  >
                   </Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="category">Source</Label>
-                  <Input id="source" name="source" type="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                  <Label for="source">Source</Label>
+                  <Input id="source"
+                         name="source"
+                         type="string"
+                         value={source}
+                         onChange={handleInputChange}
+                  >
                   </Input>
                 </FormGroup>
-                <Button className="mt-2">Submit</Button>
+                <FormGroup>
+                  <Label for="date">Date</Label>
+                  <Input id="date"
+                         name="date"
+                         type="string"
+                         value={date}
+                         onChange={handleInputChange}
+                  >
+                  </Input>
+                </FormGroup>
+                <Button className="mt-2" type="submit">Submit</Button>
               </Form>
               )}
             </CardBody>
