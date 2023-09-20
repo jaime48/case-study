@@ -18,16 +18,23 @@ const News = () => {
   };
 
   useEffect(() => {
-    // Define a function to fetch news data from your API
     const fetchNewsData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/news/list');
+        const accessToken = localStorage.getItem('accessToken');
+        console.log('token', accessToken);
+        const response =await fetch('http://localhost:8080/api/news/list', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         console.log(data.data);
-        setNewsData(data.data); // Update the component state with the fetched data
+        setNewsData(data.data);
       } catch (error) {
         console.error(error);
       }

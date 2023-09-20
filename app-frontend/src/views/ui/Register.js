@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import {Button, Form, FormGroup, FormText, Input, Label} from "reactstrap";
+import {Button, Form, FormGroup, Input, Label} from "reactstrap";
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate  = useNavigate();
+
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
+    email: '',
     password: '',
     confirmPassword: '',
   });
@@ -14,21 +18,44 @@ const Register = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password === formData.confirmPassword) {
       setPasswordsMatch(true);
-      console.log('Form submitted:', formData);
     } else {
       setPasswordsMatch(false);
     }
     console.log('Form Data:', formData);
+    const response = await fetch('http://localhost:8080/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    console.log(response);
+    if (response.status === 200) {
+      navigate('/login');
+    } else {
+      console.error('Registration failed');
+    }
   };
 
   return (
       <div>
         <h2>Register</h2>
         <Form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label for="name">Name</Label>
+            <Input
+                id="name"
+                name="name"
+                type="string"
+                onChange={handleChange}
+                value={formData.name}
+                required
+            />
+          </FormGroup>
           <FormGroup>
             <Label for="email">Email</Label>
             <Input

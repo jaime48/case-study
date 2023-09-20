@@ -8,6 +8,7 @@ use App\Http\Resources\NewsResource;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController
 {
@@ -17,6 +18,9 @@ class NewsController
      */
     public function list(NewsListRequest $request): AnonymousResourceCollection
     {
+        if (Auth::guard('sanctum')->check()) {
+            $user = Auth::guard('sanctum')->user();
+        }
         $query = News::query();
         if ($request->category) {
             $query = $query->category($request->category);

@@ -1,22 +1,37 @@
 import React, { useState } from 'react';
-import {Button, Form, FormGroup, FormText, Input, Label} from "reactstrap";
+import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here, you can add code to validate and submit the form data
-    // For a simple example, we'll just log the data to the console
     console.log('Form Data:', formData);
+    const response = await fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    console.log(response);
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(data);
+      localStorage.setItem('accessToken', data.token)
+      setErrorMessage(null);
+    } else {
+      setErrorMessage('Login failed');
+    }
   };
 
   return (
@@ -47,6 +62,7 @@ const Login = () => {
                 required
             />
           </FormGroup>
+          {errorMessage && <div className="text-danger">{errorMessage}</div>}
           <Button className="mt-2">Submit</Button>
         </Form>
       </div>
