@@ -15,6 +15,7 @@ class NewsController
 {
     /**
      * @param NewsListRequest $request
+     * @param PreferenceService $preferenceService
      * @return AnonymousResourceCollection
      */
     public function list(NewsListRequest $request, PreferenceService $preferenceService): AnonymousResourceCollection
@@ -44,18 +45,27 @@ class NewsController
         return NewsResource::collection($news);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getCategories(): JsonResponse
     {
         $categories = News::distinct('category')->whereNotNull('category')->pluck('category');
         return response()->json(['categories' => $categories]);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getAuthors(): JsonResponse
     {
         $authors = News::distinct('author')->whereNotNull('author')->pluck('author');
         return response()->json(['authors' => $authors]);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getSources(): JsonResponse
     {
         return response()->json(['sources' => Sources::cases()]);

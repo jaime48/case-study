@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, FormGroup, Label } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { API_BASE_URL } from '../../config/config';
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Setting = () => {
 
   const fetchOptions = async (optionType, setOptions) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/news/${optionType}`);
+      const response = await fetch(`${API_BASE_URL}/news/${optionType}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -40,7 +41,6 @@ const Setting = () => {
         value: optionType,
         label: optionType.charAt(0).toUpperCase() + optionType.slice(1),
       }));
-      console.log('options', options);
       setOptions(options);
       setLoadingOptions(false);
     } catch (error) {
@@ -58,7 +58,7 @@ const Setting = () => {
       result[key] = formData[key].map(item => item.value);
       return result;
     }, {});
-    const response = await fetch('http://localhost:8080/api/news/settings', {
+    const response = await fetch(`${API_BASE_URL}/news/settings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const Setting = () => {
     });
 
     if (response.ok) {
-
+      navigate('/news');
     }
   };
 

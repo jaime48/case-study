@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/config';
 
 const Register = () => {
   const navigate  = useNavigate();
@@ -26,7 +27,7 @@ const Register = () => {
       setPasswordsMatch(false);
     }
     console.log('Form Data:', formData);
-    const response = await fetch('http://localhost:8080/api/register', {
+    const response = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

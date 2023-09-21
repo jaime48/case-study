@@ -33,7 +33,7 @@ class FetchNews extends Command
     public function handle(): void
     {
         foreach ($this->syncNewsServices as $syncNewsService) {
-            try{
+            try {
                 $news = $syncNewsService->fetchNews();
                 $syncNewsService->saveNews($news);
             } catch (\Exception $e) {

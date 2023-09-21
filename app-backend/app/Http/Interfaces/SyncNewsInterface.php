@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 interface SyncNewsInterface
 {
-    public function fetchNews() : Collection;
+    public function fetchNews(): Collection;
 
-    public function saveNews(Collection $news) : void;
+    public function saveNews(Collection $news): void;
 }

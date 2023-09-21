@@ -13,6 +13,7 @@ import {
   Input,
 } from 'reactstrap';
 import Select from 'react-select';
+import { API_BASE_URL } from '../../config/config';
 
 const News = () => {
   const [loadingOptions, setLoadingOptions] = useState(true);
@@ -105,7 +106,7 @@ const News = () => {
     try {
       const selectedCategoryValues = selectedCategories.map((category) => category.value);
       const selectedSourceValues = selectedSources.map((source) => source.value);
-      const response = await fetch('http://localhost:8080/api/news/list', {
+      const response = await fetch(`${API_BASE_URL}/news/list`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

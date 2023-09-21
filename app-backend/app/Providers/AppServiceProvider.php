@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        $this->app->bind(FetchNews::class, function() {
+        $this->app->bind(FetchNews::class, function () {
             return new FetchNews(App::make(SyncNewsInterface::class));
         });
     }

@@ -14,7 +14,8 @@ class AuthController
      * @param Request $request
      * @return JsonResponse
      */
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $user = User::create([
             'name' => $request->name,
             'email' =>  $request->email,
@@ -28,7 +29,8 @@ class AuthController
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $user = User::where('email', $request->email)->first();
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

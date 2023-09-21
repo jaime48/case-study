@@ -23,6 +23,7 @@ class NyTimesApiService implements SyncNewsInterface
     }
 
     /**
+     * @return Collection
      * @throws RequestException
      */
     public function fetchNews(): Collection
@@ -35,9 +36,13 @@ class NyTimesApiService implements SyncNewsInterface
         return collect($response->object()->results);
     }
 
+    /**
+     * @param Collection $news
+     * @return void
+     */
     public function saveNews(Collection $news): void
     {
-        $news->each(function($item) {
+        $news->each(function ($item) {
             News::create([
                 'title' => $item->title,
                 'category' => $item->section,

@@ -23,6 +23,7 @@ class GuardianApiService implements SyncNewsInterface
     }
 
     /**
+     * @return Collection
      * @throws RequestException
      */
     public function fetchNews(): Collection
@@ -35,9 +36,13 @@ class GuardianApiService implements SyncNewsInterface
         return collect($response->object()->response->results);
     }
 
+    /**
+     * @param Collection $news
+     * @return void
+     */
     public function saveNews(Collection $news): void
     {
-        $news->each(function($item) {
+        $news->each(function ($item) {
             News::create([
                 'title' => $item->webTitle,
                 'category' => $item->sectionId,

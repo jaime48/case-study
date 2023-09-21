@@ -22,14 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 });
 
-Route::post('/register',  [AuthController::class, 'register'])->name('register');
-Route::post('/login',  [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::prefix('news')->group(function() {
+Route::prefix('news')->group(function () {
     Route::any('/list', [NewsController::class, 'list']);
-    Route::get('/categories',  [NewsController::class, 'getCategories']);
-    Route::get('/sources',  [NewsController::class, 'getSources']);
-    Route::get('/authors',  [NewsController::class, 'getAuthors']);
-    Route::post('/settings',  [UserController::class, 'setUserPreference']);
+    Route::get('/categories', [NewsController::class, 'getCategories']);
+    Route::get('/sources', [NewsController::class, 'getSources']);
+    Route::get('/authors', [NewsController::class, 'getAuthors']);
+    Route::post('/settings', [UserController::class, 'setUserPreference']);
 });
-
