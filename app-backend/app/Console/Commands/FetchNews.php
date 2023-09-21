@@ -19,7 +19,7 @@ class FetchNews extends Command
      */
     protected $description = 'Command description';
 
-    private  array $syncNewsServices;
+    private array $syncNewsServices;
 
     /**
      * @return void

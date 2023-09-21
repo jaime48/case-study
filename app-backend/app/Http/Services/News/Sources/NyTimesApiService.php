@@ -25,7 +25,7 @@ class NyTimesApiService implements SyncNewsInterface
     /**
      * @throws RequestException
      */
-    public function fetchNews()
+    public function fetchNews(): Collection
     {
         $queryParams = [
             'api-key' => $this->apiKey,

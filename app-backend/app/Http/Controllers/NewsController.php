@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enum\Sources;
 use App\Http\Requests\NewsListRequest;
 use App\Http\Resources\NewsResource;
+use App\Http\Services\Users\PreferenceService;
 use App\Models\News;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -16,29 +17,30 @@ class NewsController
      * @param NewsListRequest $request
      * @return AnonymousResourceCollection
      */
-    public function list(NewsListRequest $request): AnonymousResourceCollection
+    public function list(NewsListRequest $request, PreferenceService $preferenceService): AnonymousResourceCollection
     {
         $query = News::query();
-        if ($request->category) {
-            $query = $query->category($request->category);
+        if ($request->categories) {
+            $query = $query->category($request->categories);
         }
         if ($request->keyword) {
             $query = $query->keyword($request->keyword);
         }
-        if ($request->source) {
-            $query = $query->source($request->source);
+        if ($request->sources) {
+            $query = $query->source($request->sources);
         }
         if ($request->date) {
             $query = $query->date($request->date);
         }
 
-        $news = $query->limit(20)->get();
+        //todo add proper paginate
+        $news = $query->limit(10)->get();
 
         if (Auth::guard('sanctum')->check()) {
             $user = Auth::guard('sanctum')->user();
-            //todo filter by preferences
+            $news = $preferenceService->filterByPreference($user, $news);
         }
-        //todo add proper paginate
+
         return NewsResource::collection($news);
     }
 

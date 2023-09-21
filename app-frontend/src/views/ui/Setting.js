@@ -51,9 +51,25 @@ const Setting = () => {
     setFormData({ ...formData, [name]: selectedOptions });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+    const accessToken = localStorage.getItem('accessToken');
+    const transformedData = Object.keys(formData).reduce((result, key) => {
+      result[key] = formData[key].map(item => item.value);
+      return result;
+    }, {});
+    const response = await fetch('http://localhost:8080/api/news/settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(transformedData),
+    });
+
+    if (response.ok) {
+
+    }
   };
 
   return (

@@ -17,9 +17,9 @@ class News extends Model
         'date' => 'date'
     ];
 
-    public function scopeCategory($query, $category)
+    public function scopeCategory($query, $categories)
     {
-        return $query->where('category', $category);
+        return $query->whereIn('category', $categories);
     }
 
     public function scopeKeyword($query, $keyword)
@@ -28,9 +28,9 @@ class News extends Model
             ->orWhere('content', 'like', '%'.$keyword.'%');
     }
 
-    public function scopeSource($query, $source)
+    public function scopeSource($query, $sources)
     {
-        return $query->where('source', $source);
+        return $query->whereIn('source', $sources);
     }
 
     public function scopeDate($query, $date)

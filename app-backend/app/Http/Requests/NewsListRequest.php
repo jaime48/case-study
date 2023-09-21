@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NewsListRequest extends FormRequest
@@ -17,14 +18,14 @@ class NewsListRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'category' => 'nullable|string',
+            'categories' => 'nullable|array',
             'keyword' => 'nullable|string',
-            'source' => 'nullable|string',
+            'sources' => 'nullable|array',
             'date' => 'nullable|date',
         ];
     }

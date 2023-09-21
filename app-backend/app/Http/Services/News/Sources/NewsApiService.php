@@ -7,6 +7,7 @@ use App\Http\Interfaces\SyncNewsInterface;
 use App\Models\News;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 class NewsApiService implements SyncNewsInterface
@@ -24,7 +25,7 @@ class NewsApiService implements SyncNewsInterface
     /**
      * @throws RequestException
      */
-    public function fetchNews()
+    public function fetchNews(): Collection
     {
         $queryParams = [
             'country' => 'us',

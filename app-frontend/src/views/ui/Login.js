@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ reloadHeader }) => {
+  const navigate  = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,11 +25,10 @@ const Login = () => {
       },
       body: JSON.stringify(formData),
     });
-    console.log(response);
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
       localStorage.setItem('accessToken', data.token)
+      navigate('/news');
       setErrorMessage(null);
     } else {
       setErrorMessage('Login failed');

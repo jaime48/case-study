@@ -2,11 +2,12 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -40,4 +41,10 @@ class User extends Model
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function userPreference(): HasOne
+    {
+        return $this->hasOne(UserPreference::class);
+    }
+
 }

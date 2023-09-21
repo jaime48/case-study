@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import {
   Navbar,
@@ -12,9 +12,22 @@ import Register from "../views/ui/Register";
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [forceUpdate, setForceUpdate] = useState(false);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setForceUpdate(!forceUpdate); // Trigger a re-render
+    }
+  }, []);
+
+  const reloadHeader = () => {
+    setForceUpdate(!forceUpdate);
+  };
+
   return (
     <Navbar color="primary" dark expand="md">
       <div className="d-flex align-items-center">
@@ -43,16 +56,20 @@ const Header = () => {
               News
             </Link>
           </NavItem>
-          <NavItem>
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link to="/register" className="nav-link">
-              Register
-            </Link>
-          </NavItem>
+          {!localStorage.getItem('accessToken') && (
+              <>
+                <NavItem>
+                  <Link to="/login" className="nav-link">
+                    Login
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link to="/register" className="nav-link">
+                    Register
+                  </Link>
+                </NavItem>
+              </>
+          )}
           <NavItem>
             <Link to="/setting" className="nav-link">
               Settings
