@@ -3,7 +3,7 @@ import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../config/config';
 
-const Login = ({ reloadHeader }) => {
+const Login = () => {
   const navigate  = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -18,7 +18,6 @@ const Login = ({ reloadHeader }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
     const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: {

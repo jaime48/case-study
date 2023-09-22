@@ -38,7 +38,6 @@ const News = () => {
           value: optionType,
           label: optionType.charAt(0).toUpperCase() + optionType.slice(1),
         }));
-        console.log('options', options);
         setOptions(options);
         setLoadingOptions(false);
       } catch (error) {
@@ -49,7 +48,6 @@ const News = () => {
     const fetchNewsData = async () => {
       try {
         const accessToken = localStorage.getItem('accessToken');
-        console.log('token', accessToken);
         const response =await fetch('http://localhost:8080/api/news/list', {
           method: 'GET',
           headers: {

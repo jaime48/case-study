@@ -26,7 +26,6 @@ const Register = () => {
     } else {
       setPasswordsMatch(false);
     }
-    console.log('Form Data:', formData);
     const response = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',
       headers: {
