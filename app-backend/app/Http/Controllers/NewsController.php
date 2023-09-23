@@ -34,8 +34,7 @@ class NewsController
             $query = $query->date($request->date);
         }
 
-        //todo add proper paginate
-        $news = $query->limit(10)->get();
+        $news = $query->get();
 
         if (Auth::guard('sanctum')->check()) {
             $user = Auth::guard('sanctum')->user();
