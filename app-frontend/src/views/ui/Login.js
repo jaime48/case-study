@@ -29,6 +29,7 @@ const Login = () => {
       const data = await response.json();
       localStorage.setItem('accessToken', data.token)
       navigate('/news');
+      window.location.reload()
       setErrorMessage(null);
     } else {
       setErrorMessage('Login failed');
