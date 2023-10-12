@@ -16,11 +16,11 @@ services:
         context: ./app-frontend
         dockerfile: Dockerfile
       ports:
-        - "80:80"
+        - "80:3000"
       networks:
         - app-network
       volumes:
-        - ./app-frontend/:/app
+        - ./app-frontend/:/app:delegated
       stdin_open: true
 
     php:
@@ -34,7 +34,7 @@ services:
         MYSQL_USER: ${DB_USERNAME}
       working_dir: /var/www
       volumes:
-        - ./app-backend:/var/www
+        - ./app-backend:/var/www:delegated
       ports:
         - "8000:8000"
       networks:
